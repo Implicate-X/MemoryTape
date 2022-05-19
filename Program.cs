@@ -3,6 +3,9 @@ using System.Collections;
 using System.Diagnostics;
 using System.Text;
 using System.Threading;
+using GHIElectronics.TinyCLR.Pins;
+using GHIElectronics.TinyCLR.Devices.Gpio;
+using GHIElectronics.TinyCLR.Devices.Signals;
 
 namespace MemoryTape
 {
@@ -16,6 +19,9 @@ namespace MemoryTape
 		/// </summary>
 		static void Main()
 		{
+			FEZpicoBoard fezPico = new();
+
+			fezPico.Initialize();
 		}
 	}
 }
