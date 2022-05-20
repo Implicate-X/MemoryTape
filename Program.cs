@@ -19,9 +19,9 @@ namespace MemoryTape
 		/// </summary>
 		static void Main()
 		{
-			FEZpicoBoard fezPico = new();
+			FEZduinoBoard board = new();
 
-			fezPico.Initialize();
+			board.Initialize();
 		}
 	}
 }

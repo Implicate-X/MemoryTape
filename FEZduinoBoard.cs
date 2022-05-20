@@ -8,13 +8,15 @@ using GHIElectronics.TinyCLR.Devices.Signals;
 using GHIElectronics.TinyCLR.IO.TinyFileSystem;
 using GHIElectronics.TinyCLR.Native;
 using GHIElectronics.TinyCLR.Pins;
+using GHIElectronics.TinyCLR.Devices.Storage;
+using GHIElectronics.TinyCLR.Devices.Storage.Provider;
 
 namespace MemoryTape
 {
 	/// <summary>
 	/// The FEZpico board.
 	/// </summary>
-	internal class FEZpicoBoard
+	internal class FEZduinoBoard
 	{
 		/// <summary>
 		/// The green LED pin.
@@ -43,39 +45,22 @@ namespace MemoryTape
 
 		protected SignalCapture tapeReadSignal;
 
+		protected TimeSpan[] timeSpan = new TimeSpan[10];
+		protected bool isStart = true;
+		protected int count = 0;
 		/// <summary>
 		/// Initializes the FEZpico board.
 		/// </summary>
 		public void Initialize()
 		{
-			//const int CLUSTER_SIZE = 1024;
+			StorageController qspiDrive = StorageController.FromName( FEZDuino.StorageController.QuadSpi );
+			
 
-			//DeviceInformation.SetDebugInterface(DebugInterface.Disable);
+			pinLedRed = GpioController.GetDefault().OpenPin( FEZDuino.GpioPin.PE8 );
+			pinLedGrn = GpioController.GetDefault().OpenPin( FEZDuino.GpioPin.PE9 );
+			pinLedBlu = GpioController.GetDefault().OpenPin( FEZDuino.GpioPin.PE10 );
 
-			try
-			{
-				//var tfs = new TinyFileSystem( new QspiMemory(), CLUSTER_SIZE );
-			}
-			catch( Exception ex )
-			{
-				Debug.WriteLine( ex.Message );
-			}
-
-			//if( !tfs.CheckIfFormatted() )
-			//{
-			//	//Do Format if necessary 
-			//	tfs.Format();
-			//}
-			//else
-			//{
-			//	// Mount tiny file system
-			//	tfs.Mount();
-			//}
-			pinLedRed = GpioController.GetDefault().OpenPin( SC13048.GpioPin.PB5 );
-			pinLedGrn = GpioController.GetDefault().OpenPin( SC13048.GpioPin.PB4 );
-			pinLedBlu = GpioController.GetDefault().OpenPin( SC13048.GpioPin.PB3 );
-
-			pinStartButton = GpioController.GetDefault().OpenPin( SC13048.GpioPin.PH1 );
+			pinStartButton = GpioController.GetDefault().OpenPin( FEZDuino.GpioPin.PD9 );
 
 			pinLedRed.SetDriveMode( GpioPinDriveMode.Output );
 			pinLedGrn.SetDriveMode( GpioPinDriveMode.Output );
@@ -83,16 +68,17 @@ namespace MemoryTape
 
 			pinStartButton.SetDriveMode( GpioPinDriveMode.InputPullUp );
 
-			pinLedRed.Write( GpioPinValue.Low );
-			pinLedGrn.Write( GpioPinValue.High );
-			pinLedBlu.Write( GpioPinValue.High );
+			pinLedRed.Write( GpioPinValue.High );
+			pinLedGrn.Write( GpioPinValue.Low );
+			pinLedBlu.Write( GpioPinValue.Low );
 
 			pinStartButton.ValueChanged += StartButton_ValueChanged;
 
-			pinTapeRead = GpioController.GetDefault().OpenPin( SC13048.GpioPin.PA1 );
+			pinTapeRead = GpioController.GetDefault().OpenPin( FEZDuino.GpioPin.PD1 );
+			pinTapeRead.SetDriveMode( GpioPinDriveMode.Input );	
+			pinTapeRead.ValueChanged += PinTapeRead_ValueChanged;
 
-			tapeReadSignal = new SignalCapture( pinTapeRead );
-			tapeReadSignal.DisableInterrupts = false;
+			while( count < 10 ) ;
 
 			// 0 1000 0000 1
 			// 0 0000 0000 1
@@ -122,7 +108,26 @@ namespace MemoryTape
 			//{
 			//	Debug.WriteLine( ex.Message );
 			//}
-			Thread.Sleep( Timeout.Infinite );
+			//Thread.Sleep( Timeout.Infinite );
+		}
+
+		/// <summary>
+		/// Pins the tape read_ value changed.
+		/// </summary>
+		/// <param name="sender">The sender.</param>
+		/// <param name="e">The e.</param>
+		private void PinTapeRead_ValueChanged( GpioPin sender, GpioPinValueChangedEventArgs e )
+		{
+			if (e.Edge == GpioPinEdge.RisingEdge && isStart )
+			{
+				isStart = false;
+
+				tapeReadSignal = new SignalCapture( pinTapeRead );
+				tapeReadSignal.DisableInterrupts = false;
+				tapeReadSignal.Timeout = TimeSpan.FromSeconds( 1 );
+				count += tapeReadSignal.Read( out var init, timeSpan );
+
+			}
 		}
 
 		/// <summary>
