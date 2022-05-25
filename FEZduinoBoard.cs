@@ -39,22 +39,34 @@ namespace MemoryTape
 		protected GpioPin pinStartButton;
 
 		/// <summary>
-		/// Gets the tape read signal.
+		/// The tape read pin.
 		/// </summary>
 		protected GpioPin pinTapeRead;
 
+		/// <summary>
+		/// The tape write pin.
+		/// </summary>
+		protected GpioPin pinTapeWrite;
+
+		/// <summary>
+		/// The tape read signal.
+		/// </summary>
 		protected SignalCapture tapeReadSignal;
 
-		protected TimeSpan[] timeSpan = new TimeSpan[10];
+		/// <summary>
+		/// The tape write signal.
+		/// </summary>
+		protected SignalGenerator tapeWriteSignal;
+
+		protected TimeSpan[] timeSpan = new TimeSpan[ 10 ];
 		protected bool isStart = true;
 		protected int count = 0;
-		/// <summary>
-		/// Initializes the FEZpico board.
-		/// </summary>
+
+
 		public void Initialize()
 		{
 			StorageController qspiDrive = StorageController.FromName( FEZDuino.StorageController.QuadSpi );
-			
+
 
 			pinLedRed = GpioController.GetDefault().OpenPin( FEZDuino.GpioPin.PE8 );
 			pinLedGrn = GpioController.GetDefault().OpenPin( FEZDuino.GpioPin.PE9 );
@@ -75,10 +87,13 @@ namespace MemoryTape
 			pinStartButton.ValueChanged += StartButton_ValueChanged;
 
 			pinTapeRead = GpioController.GetDefault().OpenPin( FEZDuino.GpioPin.PD1 );
-			pinTapeRead.SetDriveMode( GpioPinDriveMode.Input );	
+			pinTapeRead.SetDriveMode( GpioPinDriveMode.Input );
 			pinTapeRead.ValueChanged += PinTapeRead_ValueChanged;
 
-			while( count < 10 ) ;
+			pinTapeWrite = GpioController.GetDefault().OpenPin( FEZDuino.GpioPin.PD0 );
+
+
+			//while( count < 10 ) ;
 
 			// 0 1000 0000 1
 			// 0 0000 0000 1
@@ -111,14 +126,16 @@ namespace MemoryTape
 			//Thread.Sleep( Timeout.Infinite );
 		}
 
+		#region Documentation
 		/// <summary>
-		/// Pins the tape read_ value changed.
+		/// Pin tape read value changed.
 		/// </summary>
-		/// <param name="sender">The sender.</param>
-		/// <param name="e">The e.</param>
+		/// <param name="sender">	The sender. </param>
+		/// <param name="e">	 	Gpio pin value changed event information. </param>
+		#endregion
 		private void PinTapeRead_ValueChanged( GpioPin sender, GpioPinValueChangedEventArgs e )
 		{
-			if (e.Edge == GpioPinEdge.RisingEdge && isStart )
+			if( e.Edge == GpioPinEdge.RisingEdge && isStart )
 			{
 				isStart = false;
 
