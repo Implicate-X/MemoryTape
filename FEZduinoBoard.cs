@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text;
 using System.Threading;
+using System.Linq;
 using GHIElectronics.TinyCLR.Devices.Gpio;
 using GHIElectronics.TinyCLR.Devices.Signals;
 using GHIElectronics.TinyCLR.IO.TinyFileSystem;
@@ -88,69 +90,48 @@ namespace MemoryTape
 
 			pinTapeRead = GpioController.GetDefault().OpenPin( FEZDuino.GpioPin.PD1 );
 			pinTapeRead.SetDriveMode( GpioPinDriveMode.Input );
-			pinTapeRead.ValueChanged += PinTapeRead_ValueChanged;
+			// pinTapeRead.ValueChanged += PinTapeRead_ValueChanged;
 
 			pinTapeWrite = GpioController.GetDefault().OpenPin( FEZDuino.GpioPin.PD0 );
 
-			double[] freq = { 2000, 1000 };
-			double[] time = { 1/freq[0], 1/freq[1] };
+			tapeWriteSignal = new SignalGenerator( pinTapeWrite );
+			tapeWriteSignal.DisableInterrupts = false;
+			tapeWriteSignal.IdleValue = GpioPinValue.Low;
 
-			double[] Bit0 = 
+			double[] freq = { 4000, 2000 };
+			double[] time = { 1 / freq[ 0 ], 1 / freq[ 1 ] };
+
+			ushort[] loSig = { 0, 0, 0, 0, 0, 0, 0, 0, 1, 1 };
+			ushort[] hiSig = { 0, 0, 0, 0, 1, 1, 1, 1 };
+
+			TimeSpan[] loBit = new TimeSpan[ 20 ];
+			TimeSpan[] hiBit = new TimeSpan[ 16 ];
+
+			ushort idx = 0;
+
+			foreach( ushort sig in loSig )
 			{
-				time[0],
-				time[0],
-				time[0],
-				time[0],
-				time[0],
-				time[0],
-				time[0],
-				time[0],
-				time[1],
-				time[1]
-			};
+				loBit[ idx++ ] = TimeSpan.FromSeconds( time[ sig ] );
+				loBit[ idx++ ] = TimeSpan.FromSeconds( time[ sig ] );
+			}
 
-			double[] Bit1 =
+			idx = 0;
+
+			foreach( ushort sig in hiSig )
 			{
-				time[0],
-				time[0],
-				time[0],
-				time[0],
-				time[1],
-				time[1],
-				time[1],
-				time[1]
-			};
+				hiBit[ idx++ ] = TimeSpan.FromSeconds( time[ sig ] );
+				hiBit[ idx++ ] = TimeSpan.FromSeconds( time[ sig ] );
+			}
 
-			//while( count < 10 ) ;
 
-			// 0 1000 0000 1
-			// 0 0000 0000 1
-			// 0 0000 0000 1
-			// 0 0010 0100 1
-			// 0 1000 0000 1
-			// 0 0010 0100 1
-			// 0 0011 0100 1
-			// 0 0001 0000 1
-			// 0 0010 0100 1
+			while( true )
+			{
+				tapeWriteSignal.Write( buffer: loBit );
+				tapeWriteSignal.Write( buffer: hiBit );
 
-			//bool waitForEdge = false;
-			//while( !tapeReadSignal.CanReadPulse );
-			//Debug.WriteLine( "CanReadPulse" );
+				//Thread.Sleep( 5000 );
+			}
 
-			//try
-			//{
-			//	while( true )
-			//	{
-			//		if( tapeReadSignal.CanReadPulse )
-			//		{
-			//			tapeReadSignal.ReadPulse( 2, GpioPinEdge.RisingEdge, waitForEdge );
-			//		}
-			//	}
-			//}
-			//catch( Exception ex )
-			//{
-			//	Debug.WriteLine( ex.Message );
-			//}
 			//Thread.Sleep( Timeout.Infinite );
 		}
 
