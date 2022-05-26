@@ -92,6 +92,34 @@ namespace MemoryTape
 
 			pinTapeWrite = GpioController.GetDefault().OpenPin( FEZDuino.GpioPin.PD0 );
 
+			double[] freq = { 2000, 1000 };
+			double[] time = { 1/freq[0], 1/freq[1] };
+
+			double[] Bit0 = 
+			{
+				time[0],
+				time[0],
+				time[0],
+				time[0],
+				time[0],
+				time[0],
+				time[0],
+				time[0],
+				time[1],
+				time[1]
+			};
+
+			double[] Bit1 =
+			{
+				time[0],
+				time[0],
+				time[0],
+				time[0],
+				time[1],
+				time[1],
+				time[1],
+				time[1]
+			};
 
 			//while( count < 10 ) ;
 
