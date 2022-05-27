@@ -43,7 +43,7 @@ namespace MemoryTape
 		/// <summary>
 		/// The tape read pin.
 		/// </summary>
-		protected GpioPin pinTapeRead;
+		protected GpioPin tapeReadPin;
 
 		/// <summary>
 		/// The tape write pin.
@@ -88,8 +88,8 @@ namespace MemoryTape
 
 			pinStartButton.ValueChanged += StartButton_ValueChanged;
 
-			pinTapeRead = GpioController.GetDefault().OpenPin( FEZDuino.GpioPin.PD1 );
-			pinTapeRead.SetDriveMode( GpioPinDriveMode.Input );
+			tapeReadPin = GpioController.GetDefault().OpenPin( FEZDuino.GpioPin.PD1 );
+			tapeReadPin.SetDriveMode( GpioPinDriveMode.Input );
 			// pinTapeRead.ValueChanged += PinTapeRead_ValueChanged;
 
 			pinTapeWrite = GpioController.GetDefault().OpenPin( FEZDuino.GpioPin.PD0 );
@@ -148,7 +148,7 @@ namespace MemoryTape
 			{
 				isStart = false;
 
-				tapeReadSignal = new SignalCapture( pinTapeRead );
+				tapeReadSignal = new SignalCapture( tapeReadPin );
 				tapeReadSignal.DisableInterrupts = false;
 				tapeReadSignal.Timeout = TimeSpan.FromSeconds( 1 );
 				count += tapeReadSignal.Read( out var init, timeSpan );
