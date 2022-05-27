@@ -23,17 +23,17 @@ namespace MemoryTape
 		/// <summary>
 		/// The green LED pin.
 		/// </summary>
-		protected GpioPin pinLedGrn;
+		protected GpioPin ledGrnPin;
 
 		/// <summary>
 		/// The red LED pin.
 		/// </summary>
-		protected GpioPin pinLedRed;
+		protected GpioPin ledRedPin;
 
 		/// <summary>
 		/// The blue LED pin.
 		/// </summary>
-		protected GpioPin pinLedBlu;
+		protected GpioPin ledBluPin;
 
 		/// <summary>
 		/// Gets the start button.
@@ -48,7 +48,7 @@ namespace MemoryTape
 		/// <summary>
 		/// The tape write pin.
 		/// </summary>
-		protected GpioPin pinTapeWrite;
+		protected GpioPin tapeWritePin;
 
 		/// <summary>
 		/// The tape read signal.
@@ -70,21 +70,21 @@ namespace MemoryTape
 			StorageController qspiDrive = StorageController.FromName( FEZDuino.StorageController.QuadSpi );
 
 
-			pinLedRed = GpioController.GetDefault().OpenPin( FEZDuino.GpioPin.PE8 );
-			pinLedGrn = GpioController.GetDefault().OpenPin( FEZDuino.GpioPin.PE9 );
-			pinLedBlu = GpioController.GetDefault().OpenPin( FEZDuino.GpioPin.PE10 );
+			ledRedPin = GpioController.GetDefault().OpenPin( FEZDuino.GpioPin.PE8 );
+			ledGrnPin = GpioController.GetDefault().OpenPin( FEZDuino.GpioPin.PE9 );
+			ledBluPin = GpioController.GetDefault().OpenPin( FEZDuino.GpioPin.PE10 );
 
 			pinStartButton = GpioController.GetDefault().OpenPin( FEZDuino.GpioPin.PD9 );
 
-			pinLedRed.SetDriveMode( GpioPinDriveMode.Output );
-			pinLedGrn.SetDriveMode( GpioPinDriveMode.Output );
-			pinLedBlu.SetDriveMode( GpioPinDriveMode.Output );
+			ledRedPin.SetDriveMode( GpioPinDriveMode.Output );
+			ledGrnPin.SetDriveMode( GpioPinDriveMode.Output );
+			ledBluPin.SetDriveMode( GpioPinDriveMode.Output );
 
 			pinStartButton.SetDriveMode( GpioPinDriveMode.InputPullUp );
 
-			pinLedRed.Write( GpioPinValue.High );
-			pinLedGrn.Write( GpioPinValue.Low );
-			pinLedBlu.Write( GpioPinValue.Low );
+			ledRedPin.Write( GpioPinValue.High );
+			ledGrnPin.Write( GpioPinValue.Low );
+			ledBluPin.Write( GpioPinValue.Low );
 
 			pinStartButton.ValueChanged += StartButton_ValueChanged;
 
@@ -92,9 +92,9 @@ namespace MemoryTape
 			tapeReadPin.SetDriveMode( GpioPinDriveMode.Input );
 			// pinTapeRead.ValueChanged += PinTapeRead_ValueChanged;
 
-			pinTapeWrite = GpioController.GetDefault().OpenPin( FEZDuino.GpioPin.PD0 );
+			tapeWritePin = GpioController.GetDefault().OpenPin( FEZDuino.GpioPin.PD0 );
 
-			tapeWriteSignal = new SignalGenerator( pinTapeWrite );
+			tapeWriteSignal = new SignalGenerator( tapeWritePin );
 			tapeWriteSignal.DisableInterrupts = false;
 			tapeWriteSignal.IdleValue = GpioPinValue.Low;
 
@@ -135,13 +135,11 @@ namespace MemoryTape
 			//Thread.Sleep( Timeout.Infinite );
 		}
 
-		#region Documentation
 		/// <summary>
 		/// Pin tape read value changed.
 		/// </summary>
 		/// <param name="sender">	The sender. </param>
 		/// <param name="e">	 	Gpio pin value changed event information. </param>
-		#endregion
 		private void PinTapeRead_ValueChanged( GpioPin sender, GpioPinValueChangedEventArgs e )
 		{
 			if( e.Edge == GpioPinEdge.RisingEdge && isStart )
@@ -170,8 +168,8 @@ namespace MemoryTape
 
 			//tapeReadSignal.Capture( 1000, GpioPinEdge.RisingEdge, false );
 
-			pinLedRed.Write( ( pinLedRed.Read() == GpioPinValue.Low ) ? GpioPinValue.High : GpioPinValue.Low );
-			pinLedGrn.Write( ( pinLedGrn.Read() == GpioPinValue.Low ) ? GpioPinValue.High : GpioPinValue.Low );
+			ledRedPin.Write( ( ledRedPin.Read() == GpioPinValue.Low ) ? GpioPinValue.High : GpioPinValue.Low );
+			ledGrnPin.Write( ( ledGrnPin.Read() == GpioPinValue.Low ) ? GpioPinValue.High : GpioPinValue.Low );
 		}
 	}
 }
