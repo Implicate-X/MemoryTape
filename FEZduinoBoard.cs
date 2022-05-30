@@ -41,6 +41,16 @@ namespace MemoryTape
 		protected GpioPin pinStartButton;
 
 		/// <summary>
+		/// The lower Tone in Hz.
+		/// </summary>
+		protected const double lowerTone = 2000.0;
+
+		/// <summary>
+		/// The higher tone in Hz.
+		/// </summary>
+		protected const double higherTone = 4000.0;
+
+		/// <summary>
 		/// The tape read pin.
 		/// </summary>
 		protected GpioPin tapeReadPin;
@@ -98,8 +108,7 @@ namespace MemoryTape
 			tapeWriteSignal.DisableInterrupts = false;
 			tapeWriteSignal.IdleValue = GpioPinValue.Low;
 
-			double[] freq = { 4000, 2000 };
-			double[] time = { 1 / freq[ 0 ], 1 / freq[ 1 ] };
+			double[] time = { 1 / higherTone, 1 / lowerTone };
 
 			ushort[] loSig = { 0, 0, 0, 0, 0, 0, 0, 0, 1, 1 };
 			ushort[] hiSig = { 0, 0, 0, 0, 1, 1, 1, 1 };
@@ -132,6 +141,17 @@ namespace MemoryTape
 				//Thread.Sleep( 5000 );
 			}
 
+
+
+			byte a = 0xAA;
+
+			// 10101010
+			// 10000000
+
+			for( byte i = 0; i < 8; i++ )
+			{
+				byte x = ( byte )( ( a & ( byte )Math.Pow( 2, i ) ) >> i );
+			}
 			//Thread.Sleep( Timeout.Infinite );
 		}
 
