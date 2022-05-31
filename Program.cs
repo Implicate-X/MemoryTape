@@ -19,6 +19,7 @@ namespace MemoryTape
 		/// </summary>
 		static void Main()
 		{
+
 			FEZduinoBoard board = new();
 
 			board.Initialize();

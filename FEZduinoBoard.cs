@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections;
-using System.Collections.Generic;
+//using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text;
 using System.Threading;
-using System.Linq;
+//using System.Linq;
 using GHIElectronics.TinyCLR.Devices.Gpio;
 using GHIElectronics.TinyCLR.Devices.Signals;
 using GHIElectronics.TinyCLR.IO.TinyFileSystem;
@@ -77,9 +77,6 @@ namespace MemoryTape
 
 		public void Initialize()
 		{
-			StorageController qspiDrive = StorageController.FromName( FEZDuino.StorageController.QuadSpi );
-
-
 			ledRedPin = GpioController.GetDefault().OpenPin( FEZDuino.GpioPin.PE8 );
 			ledGrnPin = GpioController.GetDefault().OpenPin( FEZDuino.GpioPin.PE9 );
 			ledBluPin = GpioController.GetDefault().OpenPin( FEZDuino.GpioPin.PE10 );
@@ -102,57 +99,69 @@ namespace MemoryTape
 			tapeReadPin.SetDriveMode( GpioPinDriveMode.Input );
 			// pinTapeRead.ValueChanged += PinTapeRead_ValueChanged;
 
-			tapeWritePin = GpioController.GetDefault().OpenPin( FEZDuino.GpioPin.PD0 );
-
-			tapeWriteSignal = new SignalGenerator( tapeWritePin );
-			tapeWriteSignal.DisableInterrupts = false;
-			tapeWriteSignal.IdleValue = GpioPinValue.Low;
-
 			double[] time = { 1 / higherTone, 1 / lowerTone };
 
 			ushort[] loSig = { 0, 0, 0, 0, 0, 0, 0, 0, 1, 1 };
 			ushort[] hiSig = { 0, 0, 0, 0, 1, 1, 1, 1 };
 
-			TimeSpan[] loBit = new TimeSpan[ 20 ];
-			TimeSpan[] hiBit = new TimeSpan[ 16 ];
-
-			ushort idx = 0;
+			ArrayList loBit = new();
+			ArrayList hiBit = new();
 
 			foreach( ushort sig in loSig )
 			{
-				loBit[ idx++ ] = TimeSpan.FromSeconds( time[ sig ] );
-				loBit[ idx++ ] = TimeSpan.FromSeconds( time[ sig ] );
+				loBit.Add( TimeSpan.FromSeconds( time[ sig ] ) );
+				loBit.Add( TimeSpan.FromSeconds( time[ sig ] ) );
 			}
-
-			idx = 0;
 
 			foreach( ushort sig in hiSig )
 			{
-				hiBit[ idx++ ] = TimeSpan.FromSeconds( time[ sig ] );
-				hiBit[ idx++ ] = TimeSpan.FromSeconds( time[ sig ] );
+				hiBit.Add( TimeSpan.FromSeconds( time[ sig ] ) );
+				hiBit.Add( TimeSpan.FromSeconds( time[ sig ] ) );
 			}
 
+			ArrayList tapeDataByte = new();
 
-			while( true )
-			{
-				tapeWriteSignal.Write( buffer: loBit );
-				tapeWriteSignal.Write( buffer: hiBit );
+			tapeDataByte.AddRange( loBit );		// Start bit
 
-				//Thread.Sleep( 5000 );
-			}
-
-
-
-			byte a = 0xAA;
-
-			// 10101010
-			// 10000000
+			byte dataByte = 0xAA;				// Test byte
 
 			for( byte i = 0; i < 8; i++ )
 			{
-				byte x = ( byte )( ( a & ( byte )Math.Pow( 2, i ) ) >> i );
+				byte flag = ( byte )( ( dataByte & ( byte )Math.Pow( 2, i ) ) >> i );
+
+				tapeDataByte.AddRange( ( flag == 1 ) ? hiBit : loBit );
 			}
-			//Thread.Sleep( Timeout.Infinite );
+
+			tapeDataByte.AddRange( hiBit );		// Stop bit
+
+
+			TimeSpan[] buffer = new TimeSpan[ tapeDataByte.Count ];
+
+
+			/// FAILED with SignalGenerator.Write
+			/// 
+			tapeDataByte.CopyTo( buffer );
+
+
+			/// SUCCEEDED with SignalGenerator.Write
+			///
+			ushort idx = 0;
+
+			foreach( TimeSpan timeSpan in tapeDataByte )
+				buffer[ idx++ ] = timeSpan;
+
+
+			tapeWritePin = GpioController.GetDefault().OpenPin( FEZDuino.GpioPin.PD0 );
+
+			tapeWriteSignal = new SignalGenerator( tapeWritePin )
+			{
+				DisableInterrupts = false,
+				IdleValue = GpioPinValue.Low
+			};
+
+			tapeWriteSignal.Write( buffer );
+
+			Thread.Sleep( Timeout.Infinite );
 		}
 
 		/// <summary>
@@ -162,16 +171,16 @@ namespace MemoryTape
 		/// <param name="e">	 	Gpio pin value changed event information. </param>
 		private void PinTapeRead_ValueChanged( GpioPin sender, GpioPinValueChangedEventArgs e )
 		{
-			if( e.Edge == GpioPinEdge.RisingEdge && isStart )
-			{
-				isStart = false;
+			//if( e.Edge == GpioPinEdge.RisingEdge && isStart )
+			//{
+			//	isStart = false;
 
-				tapeReadSignal = new SignalCapture( tapeReadPin );
-				tapeReadSignal.DisableInterrupts = false;
-				tapeReadSignal.Timeout = TimeSpan.FromSeconds( 1 );
-				count += tapeReadSignal.Read( out var init, timeSpan );
+			//	tapeReadSignal = new SignalCapture( tapeReadPin );
+			//	tapeReadSignal.DisableInterrupts = false;
+			//	tapeReadSignal.Timeout = TimeSpan.FromSeconds( 1 );
+			//	count += tapeReadSignal.Read( out var init, timeSpan );
 
-			}
+			//}
 		}
 
 		/// <summary>
