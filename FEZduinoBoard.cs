@@ -1,17 +1,10 @@
 ﻿using System;
 using System.Collections;
-//using System.Collections.Generic;
 using System.Diagnostics;
-using System.Text;
 using System.Threading;
-//using System.Linq;
 using GHIElectronics.TinyCLR.Devices.Gpio;
 using GHIElectronics.TinyCLR.Devices.Signals;
-using GHIElectronics.TinyCLR.IO.TinyFileSystem;
-using GHIElectronics.TinyCLR.Native;
 using GHIElectronics.TinyCLR.Pins;
-using GHIElectronics.TinyCLR.Devices.Storage;
-using GHIElectronics.TinyCLR.Devices.Storage.Provider;
 
 namespace MemoryTape
 {
@@ -51,29 +44,14 @@ namespace MemoryTape
 		protected const double higherTone = 4000.0;
 
 		/// <summary>
-		/// The tape read pin.
-		/// </summary>
-		protected GpioPin tapeReadPin;
-
-		/// <summary>
 		/// The tape write pin.
 		/// </summary>
 		protected GpioPin tapeWritePin;
 
 		/// <summary>
-		/// The tape read signal.
-		/// </summary>
-		protected SignalCapture tapeReadSignal;
-
-		/// <summary>
 		/// The tape write signal.
 		/// </summary>
 		protected SignalGenerator tapeWriteSignal;
-
-		protected TimeSpan[] timeSpan = new TimeSpan[ 10 ];
-		protected bool isStart = true;
-		protected int count = 0;
-
 
 		public void Initialize()
 		{
@@ -95,9 +73,6 @@ namespace MemoryTape
 
 			pinStartButton.ValueChanged += StartButton_ValueChanged;
 
-			tapeReadPin = GpioController.GetDefault().OpenPin( FEZDuino.GpioPin.PD1 );
-			tapeReadPin.SetDriveMode( GpioPinDriveMode.Input );
-			// pinTapeRead.ValueChanged += PinTapeRead_ValueChanged;
 
 			double[] time = { 1 / higherTone, 1 / lowerTone };
 
@@ -135,20 +110,23 @@ namespace MemoryTape
 			tapeDataByte.AddRange( hiBit );		// Stop bit
 
 
-			TimeSpan[] buffer = new TimeSpan[ tapeDataByte.Count ];
+			TimeSpan[] bufferFailed = new TimeSpan[ tapeDataByte.Count ];
 
 
 			/// FAILED with SignalGenerator.Write
 			/// 
-			tapeDataByte.CopyTo( buffer );
 
+			tapeDataByte.CopyTo( bufferFailed );
+
+
+			TimeSpan[] bufferSucceeded = new TimeSpan[ tapeDataByte.Count ];
 
 			/// SUCCEEDED with SignalGenerator.Write
 			///
 			ushort idx = 0;
 
 			foreach( TimeSpan timeSpan in tapeDataByte )
-				buffer[ idx++ ] = timeSpan;
+				bufferSucceeded[ idx++ ] = timeSpan;
 
 
 			tapeWritePin = GpioController.GetDefault().OpenPin( FEZDuino.GpioPin.PD0 );
@@ -159,29 +137,11 @@ namespace MemoryTape
 				IdleValue = GpioPinValue.Low
 			};
 
-			tapeWriteSignal.Write( buffer );
+			tapeWriteSignal.Write( bufferSucceeded );
 
 			Thread.Sleep( Timeout.Infinite );
 		}
 
-		/// <summary>
-		/// Pin tape read value changed.
-		/// </summary>
-		/// <param name="sender">	The sender. </param>
-		/// <param name="e">	 	Gpio pin value changed event information. </param>
-		private void PinTapeRead_ValueChanged( GpioPin sender, GpioPinValueChangedEventArgs e )
-		{
-			//if( e.Edge == GpioPinEdge.RisingEdge && isStart )
-			//{
-			//	isStart = false;
-
-			//	tapeReadSignal = new SignalCapture( tapeReadPin );
-			//	tapeReadSignal.DisableInterrupts = false;
-			//	tapeReadSignal.Timeout = TimeSpan.FromSeconds( 1 );
-			//	count += tapeReadSignal.Read( out var init, timeSpan );
-
-			//}
-		}
 
 		/// <summary>
 		/// Starts the button_ value changed.
