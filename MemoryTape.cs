@@ -9,9 +9,9 @@ using GHIElectronics.TinyCLR.Pins;
 namespace MemoryTape
 {
 	/// <summary>
-	/// The FEZpico board.
+	/// The Memory Tape board.
 	/// </summary>
-	internal class FEZduinoBoard
+	internal partial class MemoryTape
 	{
 		/// <summary>
 		/// The green LED pin.
@@ -44,14 +44,14 @@ namespace MemoryTape
 		protected const double higherTone = 4000.0;
 
 		/// <summary>
-		/// The tape write pin.
+		/// The pulse sequence for bit value 0.
 		/// </summary>
-		protected GpioPin tapeWritePin;
+		protected ArrayList loBit;
 
 		/// <summary>
-		/// The tape write signal.
+		/// The pulse sequence for bit value 1.
 		/// </summary>
-		protected SignalGenerator tapeWriteSignal;
+		protected ArrayList hiBit;
 
 		public void Initialize()
 		{
@@ -79,8 +79,8 @@ namespace MemoryTape
 			ushort[] loSig = { 0, 0, 0, 0, 0, 0, 0, 0, 1, 1 };
 			ushort[] hiSig = { 0, 0, 0, 0, 1, 1, 1, 1 };
 
-			ArrayList loBit = new();
-			ArrayList hiBit = new();
+			loBit = new();
+			hiBit = new();
 
 			foreach( ushort sig in loSig )
 			{
@@ -93,53 +93,6 @@ namespace MemoryTape
 				hiBit.Add( TimeSpan.FromSeconds( time[ sig ] ) );
 				hiBit.Add( TimeSpan.FromSeconds( time[ sig ] ) );
 			}
-
-			ArrayList tapeDataByte = new();
-
-			tapeDataByte.AddRange( loBit );		// Start bit
-
-			byte dataByte = 0xAA;				// Test byte
-
-			for( byte i = 0; i < 8; i++ )
-			{
-				byte flag = ( byte )( ( dataByte & ( byte )Math.Pow( 2, i ) ) >> i );
-
-				tapeDataByte.AddRange( ( flag == 1 ) ? hiBit : loBit );
-			}
-
-			tapeDataByte.AddRange( hiBit );		// Stop bit
-
-
-			TimeSpan[] bufferFailed = new TimeSpan[ tapeDataByte.Count ];
-
-
-			/// FAILED with SignalGenerator.Write
-			/// 
-
-			tapeDataByte.CopyTo( bufferFailed );
-
-
-			TimeSpan[] bufferSucceeded = new TimeSpan[ tapeDataByte.Count ];
-
-			/// SUCCEEDED with SignalGenerator.Write
-			///
-			ushort idx = 0;
-
-			foreach( TimeSpan timeSpan in tapeDataByte )
-				bufferSucceeded[ idx++ ] = timeSpan;
-
-
-			tapeWritePin = GpioController.GetDefault().OpenPin( FEZDuino.GpioPin.PD0 );
-
-			tapeWriteSignal = new SignalGenerator( tapeWritePin )
-			{
-				DisableInterrupts = false,
-				IdleValue = GpioPinValue.Low
-			};
-
-			tapeWriteSignal.Write( bufferSucceeded );
-
-			Thread.Sleep( Timeout.Infinite );
 		}
 
 

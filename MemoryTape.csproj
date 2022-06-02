@@ -37,12 +37,14 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="FEZduinoBoard.cs" />
+    <Compile Include="MemoryTape.cs" />
+    <Compile Include="MemoryTape.Writer.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="QspiMemory.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="MemoryTape.Reader.cs" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>

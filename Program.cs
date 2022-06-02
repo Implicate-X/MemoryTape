@@ -19,9 +19,15 @@ namespace MemoryTape
 		/// </summary>
 		static void Main()
 		{
-			FEZduinoBoard board = new();
+			MemoryTape memoryTape = new();
 
-			board.Initialize();
+			memoryTape.Initialize();
+
+			memoryTape.BeginFileWrite();
+			memoryTape.WriteFileHeader();
+			memoryTape.EndFileWrite();
+
+			Thread.Sleep( Timeout.Infinite );
 		}
 	}
 }
