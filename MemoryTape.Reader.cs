@@ -5,7 +5,10 @@ using System.Threading;
 
 namespace MemoryTape
 {
-    internal partial class MemoryTape
-    {
-    }
+	internal partial class MemoryTape
+	{
+		public MemoryTape()
+		{
+		}
+	}
 }

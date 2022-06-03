@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections;
-using System.Text;
-using System.Threading;
+using System.Diagnostics;
 using GHIElectronics.TinyCLR.Devices.Gpio;
 using GHIElectronics.TinyCLR.Devices.Signals;
 using GHIElectronics.TinyCLR.Pins;
@@ -31,7 +30,11 @@ namespace MemoryTape
 		public void BeginFileWrite()
 		{
 			tapeDataByte = new();
+
+			Debug.WriteLine( ByteToBinaryString( ReverseBitOrder( 0xAA ) ) );
 		}
+
+
 
 		/// <summary>
 		/// Writes the file header.

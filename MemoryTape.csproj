@@ -37,6 +37,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="MemoryTape.Utils.cs" />
     <Compile Include="MemoryTape.cs" />
     <Compile Include="MemoryTape.Writer.cs" />
     <Compile Include="Program.cs" />

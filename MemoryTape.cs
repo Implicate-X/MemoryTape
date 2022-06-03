@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections;
-using System.Diagnostics;
-using System.Threading;
 using GHIElectronics.TinyCLR.Devices.Gpio;
-using GHIElectronics.TinyCLR.Devices.Signals;
 using GHIElectronics.TinyCLR.Pins;
 
 namespace MemoryTape
