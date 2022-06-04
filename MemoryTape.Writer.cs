@@ -31,7 +31,7 @@ namespace MemoryTape
 		{
 			tapeDataByte = new();
 
-			Debug.WriteLine( ByteToBinaryString( ReverseBitOrder( 0xAA ) ) );
+			Debug.WriteLine( ByteToBinaryString( ReverseBitOrder( 0xF0 ) ) );
 		}
 
 
