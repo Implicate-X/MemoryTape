@@ -69,10 +69,10 @@ namespace MemoryTape
 
 		private static byte[] bitPatternTable = new byte[]
 		{
-			0b00000000,	0b00000001,	0b00000010,	0b00000011,
-			0b00000100, 0b00000101, 0b00000110, 0b00000111,
-			0b00001000,	0b00001001,	0b00001010,	0b00001011,
-			0b00001100,	0b00001101,	0b00001110,	0b00001111
+			0b_0000, 0b_0001, 0b_0010, 0b_0011,
+			0b_0100, 0b_0101, 0b_0110, 0b_0111,
+			0b_1000, 0b_1001, 0b_1010, 0b_1011,
+			0b_1100, 0b_1101, 0b_1110, 0b_1111
 		};
 
 		/// <summary>
@@ -85,7 +85,7 @@ namespace MemoryTape
 		private byte ReverseBitOrder4( byte value )
 		{
 			return ( byte )
-				( bitPatternTable[ value & 0b1111 ] << 4 | 
+				( bitPatternTable[ value & 0b_1111 ] << 4 | 
 				( bitPatternTable[ value >> 4 ] ) );
 		}
 
