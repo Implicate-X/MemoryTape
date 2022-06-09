@@ -52,21 +52,21 @@ namespace MemoryTape
 
 		public void Initialize()
 		{
-			ledRedPin = GpioController.GetDefault().OpenPin( SC13048.GpioPin.PB13 );
-			ledGrnPin = GpioController.GetDefault().OpenPin( SC13048.GpioPin.PB14 );
-			ledBluPin = GpioController.GetDefault().OpenPin( SC13048.GpioPin.PB15 );
+			//ledRedPin = GpioController.GetDefault().OpenPin( SC13048.GpioPin.PB13 );
+			//ledGrnPin = GpioController.GetDefault().OpenPin( SC13048.GpioPin.PB14 );
+			//ledBluPin = GpioController.GetDefault().OpenPin( SC13048.GpioPin.PB15 );
 
 			pinStartButton = GpioController.GetDefault().OpenPin( SC13048.GpioPin.PA4 );
 
-			ledRedPin.SetDriveMode( GpioPinDriveMode.Output );
-			ledGrnPin.SetDriveMode( GpioPinDriveMode.Output );
-			ledBluPin.SetDriveMode( GpioPinDriveMode.Output );
+			//ledRedPin.SetDriveMode( GpioPinDriveMode.Output );
+			//ledGrnPin.SetDriveMode( GpioPinDriveMode.Output );
+			//ledBluPin.SetDriveMode( GpioPinDriveMode.Output );
 
 			pinStartButton.SetDriveMode( GpioPinDriveMode.InputPullUp );
 
-			ledRedPin.Write( GpioPinValue.High );
-			ledGrnPin.Write( GpioPinValue.Low );
-			ledBluPin.Write( GpioPinValue.Low );
+			//ledRedPin.Write( GpioPinValue.Low );
+			//ledGrnPin.Write( GpioPinValue.Low );
+			//ledBluPin.Write( GpioPinValue.Low );
 
 			pinStartButton.ValueChanged += StartButton_ValueChanged;
 
