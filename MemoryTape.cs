@@ -52,11 +52,11 @@ namespace MemoryTape
 
 		public void Initialize()
 		{
-			ledRedPin = GpioController.GetDefault().OpenPin( FEZDuino.GpioPin.PE8 );
-			ledGrnPin = GpioController.GetDefault().OpenPin( FEZDuino.GpioPin.PE9 );
-			ledBluPin = GpioController.GetDefault().OpenPin( FEZDuino.GpioPin.PE10 );
+			ledRedPin = GpioController.GetDefault().OpenPin( SC13048.GpioPin.PB13 );
+			ledGrnPin = GpioController.GetDefault().OpenPin( SC13048.GpioPin.PB14 );
+			ledBluPin = GpioController.GetDefault().OpenPin( SC13048.GpioPin.PB15 );
 
-			pinStartButton = GpioController.GetDefault().OpenPin( FEZDuino.GpioPin.PD9 );
+			pinStartButton = GpioController.GetDefault().OpenPin( SC13048.GpioPin.PA4 );
 
 			ledRedPin.SetDriveMode( GpioPinDriveMode.Output );
 			ledGrnPin.SetDriveMode( GpioPinDriveMode.Output );

@@ -76,7 +76,7 @@ namespace MemoryTape
 				tapeDataBuffer[ idx++ ] = timeSpan;
 
 
-			tapeWritePin = GpioController.GetDefault().OpenPin( FEZDuino.GpioPin.PD0 );
+			tapeWritePin = GpioController.GetDefault().OpenPin( SC13048.GpioPin.PH1 );
 
 			tapeWriteSignal = new SignalGenerator( tapeWritePin )
 			{
