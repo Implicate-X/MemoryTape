@@ -19,15 +19,18 @@ namespace MemoryTape
 		/// </summary>
 		static void Main()
 		{
-			MemoryTape memoryTape = new();
+			ADC adc = new();
+			adc.Initialize();
 
-			memoryTape.Initialize();
+			//MemoryTape memoryTape = new();
 
-			memoryTape.BeginFileWrite();
-			memoryTape.WriteFileHeader();
-			memoryTape.EndFileWrite();
+			//memoryTape.Initialize();
 
-			Thread.Sleep( Timeout.Infinite );
+			//memoryTape.BeginFileWrite();
+			//memoryTape.WriteFileHeader();
+			//memoryTape.EndFileWrite();
+
+			//Thread.Sleep( Timeout.Infinite );
 		}
 	}
 }
