@@ -15,6 +15,11 @@ namespace MemoryTape
 	/// </summary>
 	internal class ADC
 	{
+		protected GpioPin LCD_RES;	// PE0
+		protected GpioPin LCD_DC;	// PE1
+		protected GpioPin LCD_CS;	// PE8
+		protected GpioPin LCD_BL;	// PE7
+
 		protected AdcController adcController;
 		protected AdcChannel adcChannel;
 
