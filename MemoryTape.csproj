@@ -42,7 +42,6 @@
     <Compile Include="MemoryTape.Writer.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="QspiMemory.cs" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="MemoryTape.Reader.cs" />
@@ -64,17 +63,11 @@
     <Reference Include="GHIElectronics.TinyCLR.Devices.Spi, Version=2.2.0.4200, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>packages\GHIElectronics.TinyCLR.Devices.Spi.2.2.0.4200\lib\net452\GHIElectronics.TinyCLR.Devices.Spi.dll</HintPath>
     </Reference>
-    <Reference Include="GHIElectronics.TinyCLR.Devices.Storage, Version=2.2.0.4200, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>packages\GHIElectronics.TinyCLR.Devices.Storage.2.2.0.4200\lib\net452\GHIElectronics.TinyCLR.Devices.Storage.dll</HintPath>
+    <Reference Include="GHIElectronics.TinyCLR.Drawing, Version=2.2.0.4200, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>packages\GHIElectronics.TinyCLR.Drawing.2.2.0.4200\lib\net452\GHIElectronics.TinyCLR.Drawing.dll</HintPath>
     </Reference>
-    <Reference Include="GHIElectronics.TinyCLR.Drivers.Sitronix.ST7789, Version=2.2.0.4200, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>packages\GHIElectronics.TinyCLR.Drivers.Sitronix.ST7789.2.2.0.4200\lib\net452\GHIElectronics.TinyCLR.Drivers.Sitronix.ST7789.dll</HintPath>
-    </Reference>
-    <Reference Include="GHIElectronics.TinyCLR.IO, Version=2.2.0.4200, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>packages\GHIElectronics.TinyCLR.IO.2.2.0.4200\lib\net452\GHIElectronics.TinyCLR.IO.dll</HintPath>
-    </Reference>
-    <Reference Include="GHIElectronics.TinyCLR.IO.TinyFileSystem, Version=2.2.0.4200, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>packages\GHIElectronics.TinyCLR.IO.TinyFileSystem.2.2.0.4200\lib\net452\GHIElectronics.TinyCLR.IO.TinyFileSystem.dll</HintPath>
+    <Reference Include="GHIElectronics.TinyCLR.Drivers.Sitronix.ST7735, Version=2.2.0.4200, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>packages\GHIElectronics.TinyCLR.Drivers.Sitronix.ST7735.2.2.0.4200\lib\net452\GHIElectronics.TinyCLR.Drivers.Sitronix.ST7735.dll</HintPath>
     </Reference>
     <Reference Include="GHIElectronics.TinyCLR.Native, Version=2.2.0.4200, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>packages\GHIElectronics.TinyCLR.Native.2.2.0.4200\lib\net452\GHIElectronics.TinyCLR.Native.dll</HintPath>

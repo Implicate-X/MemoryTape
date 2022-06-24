@@ -10,12 +10,13 @@ using GHIElectronics.TinyCLR.Devices.Signals;
 namespace MemoryTape
 {
 	/// <summary>
-	/// The program.
+	/// Pinout of FEZ Pico (Device Name: FEZpico1).
+	/// @@img:"D:\Code\IoT\MemoryTape\Docs\fez-pico-pinout.png"
 	/// </summary>
 	internal class Program
 	{
 		/// <summary>
-		/// Mains the.
+		/// The entry point.
 		/// </summary>
 		static void Main()
 		{
