@@ -11,7 +11,6 @@ namespace MemoryTape
 {
 	/// <summary>
 	/// Pinout of FEZ Pico (Device Name: FEZpico1).
-	/// @@img:"D:\Code\IoT\MemoryTape\Docs\fez-pico-pinout.png"
 	/// </summary>
 	internal class Program
 	{

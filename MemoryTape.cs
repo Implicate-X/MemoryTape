@@ -15,17 +15,17 @@ namespace MemoryTape
 	internal partial class MemoryTape
 	{
 		/// <summary>
-		/// The green LED pin.
+		/// The green LED pin.<br/>PA6 (J4.38 - Green channel)
 		/// </summary>
 		protected GpioPin ledGrnPin;
 
 		/// <summary>
-		/// The red LED pin.
+		/// The red LED pin.<br/>PA3 (J4.39 - Red channel)
 		/// </summary>
 		protected GpioPin ledRedPin;
 
 		/// <summary>
-		/// The blue LED pin.
+		/// The blue LED pin.<br/>PA7 (J4.37 - Blue channel)
 		/// </summary>
 		protected GpioPin ledBluPin;
 

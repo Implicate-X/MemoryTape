@@ -10,7 +10,7 @@ namespace MemoryTape
     internal partial class MemoryTape
     {
 		/// <summary>
-		/// The tape write pin.
+		/// The tape write pin.<br/>PB1 (J4.40 - Buzzer)
 		/// </summary>
 		protected GpioPin tapeWritePin;
 
@@ -76,7 +76,7 @@ namespace MemoryTape
 				tapeDataBuffer[ idx++ ] = timeSpan;
 
 
-			tapeWritePin = GpioController.GetDefault().OpenPin( SC13048.GpioPin.PH1 );
+			tapeWritePin = GpioController.GetDefault().OpenPin( FEZFeather.GpioPin.PB1 );
 
 			tapeWriteSignal = new SignalGenerator( tapeWritePin )
 			{
