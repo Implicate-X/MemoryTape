@@ -6,8 +6,8 @@ using GHIElectronics.TinyCLR.Devices.Gpio;
 using GHIElectronics.TinyCLR.Devices.Spi;
 using GHIElectronics.TinyCLR.Pins;
 using GHIElectronics.TinyCLR.Drivers.Sitronix.ST7735;
-Bis 1987 im 23. Lj. ~60 kg bei 189 cm, weil mir seit meiner Kindheit nach jedem Essen übel wurde, nur durch Aufmachen auf Verdacht der kindliche Leistenbruch, ein großer distal verschlossener Processus vaginalis (11 × 1 cm) entdeckt und repariert wurde, Schland-Medizin ...🤦‍♂️(1/2)namespace MemoryTape
-is 1987 im 23. Lj. ~60 kg bei 189 cm, weil mir seit meiner Kindheit nach jedem Essen übel wurde, nur durch Aufmachen auf Verdacht der kindliche Leistenbruch, ein großer distal verschlossener Processus vaginalis (11 × 1 cm) entdeckt und repariert wurde, Schland-Medizin ...🤦‍♂️(1/2)
+
+namespace MemoryTape
 {
 	/// <summary>
 	/// Pinout of FEZ Feather (Device Name: FEZfeather2).
