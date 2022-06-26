@@ -9,10 +9,6 @@ namespace MemoryTape
 {
     internal partial class MemoryTape
     {
-		/// <summary>
-		/// The tape write pin.<br/>PB1 (J4.40 - Buzzer)
-		/// </summary>
-		protected GpioPin tapeWritePin;
 
 		/// <summary>
 		/// The tape write signal.
